@@ -1,7 +1,7 @@
 import json
 import os
 from urllib import error, request
-
+#this code pushes headlines to groq ai and brings json files from there
 from env_utils import load_local_env
 
 load_local_env()
