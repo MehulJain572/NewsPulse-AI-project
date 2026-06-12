@@ -21,7 +21,7 @@ def process_news_item(news_item, seen_store, portfolio_store):
     seen_store.mark_seen(fingerprint)
     log_event("ingestion", news_item, status="fresh")
 
-    print(f"\n[ANALYZE] {headline[:90]}")
+    print(f"\n[ANALYZE] {headline[:90]}...")
     analysis = analyze_news(news_item)
 
     if not analysis:
@@ -37,17 +37,18 @@ def process_news_item(news_item, seen_store, portfolio_store):
         f"| valid={validation['approved']}"
     )
     
-    if validation["approved"] and analysis["panic_score"] >= 80:
+    if analysis["panic_score"] >= 80:
         company = analysis['company']
         
         send_approval_request(
             company, 
             analysis['action'], 
             analysis['panic_score'], 
-            analysis.get('reason', 'Critical market event')
+            analysis.get('reason', 'Critical Market Event Detected')
         )
         
-        print(f"    [WAITING] Critical event! Waiting for mobile authorization for {company}...")
+        print(f"    ⚠️ [ALERT] High Panic ({analysis['panic_score']})! Request sent to Telegram. Waiting for approval...")
+        
         start_time = time.time()
         authorized = False
         
@@ -60,14 +61,19 @@ def process_news_item(news_item, seen_store, portfolio_store):
                 break
             time.sleep(1)
         
-        if not authorized:
-            print(f"    [ABORTED] Trade for {company} rejected or timed out.")
+        if authorized:
+            if validation.get("company_info") and validation["company_info"].get("symbol"):
+                print(f"    ✅ [AUTHORIZED] Mobile approval received for {company}! Proceeding...")
+                validation["approved"] = True 
+                user_responses.pop(company, None) 
+            else:
+                print(f"    ⚠️ [SKIP] Approval received, but '{company}' is not a listed stock. Skipping trade execution.")
+                user_responses.pop(company, None)
+                return
+        else:
+            print(f"    ❌ [ABORTED] Trade for {company} was rejected or timed out.")
             log_event("authorization", news_item, status="rejected", details="User denied or timeout")
             return
-        
-        print(f"    [AUTHORIZED] Mobile approval received for {company}. Proceeding to execution...")
-        user_responses.pop(company, None) 
-
 
     if not validation["approved"]:
         log_event("validation", news_item, status="rejected", details="; ".join(validation["reasons"]))
@@ -81,7 +87,7 @@ def process_news_item(news_item, seen_store, portfolio_store):
 
     if trade_result["status"] in {"simulated", "placed"}:
         print(
-            f"✅ [TRADE EXECUTED] {analysis['company']} | {analysis['action']} {trade_result['quantity']} "
+            f"\n🔥 [TRADE EXECUTED] {analysis['company']} | {analysis['action']} {trade_result['quantity']} "
             f"shares | stop-loss {trade_result['stop_loss_pct']}%"
         )
 
@@ -91,26 +97,25 @@ def run_news_pulse_agent():
     portfolio_store = PortfolioStore()
 
     print("\n" + "=" * 60)
-    print("NEWSPULSE AI: AUTONOMOUS AGENT IS LIVE")
+    print("NEWSPULSE AI: AUTONOMOUS AGENT IS LIVE (DEMO MODE)")
     print("=" * 60)
-    print(f"[INFO] Scan interval: {settings.scan_interval_seconds}s | Broker mode: {settings.broker_mode}")
     
     threading.Thread(target=bot.infinity_polling, daemon=True).start()
-    print("[INFO] Telegram Listener started in background.")
+    print("[INFO] Telegram Mobile Link active.")
 
     while True:
-        print("\n[LOG] Fetching latest headlines...")
+        print("\n[LOG] Scanning for fresh news...")
         headlines = get_all_headlines()
 
         if not headlines:
-            print("[WARN] No headlines fetched in this cycle.")
+            print("[WARN] No headlines fetched.")
         else:
-            print(f"[LOG] {len(headlines)} total headlines fetched. Processing fresh items...")
+            print(f"[LOG] Processing {len(headlines)} items...")
             for news_item in headlines:
                 process_news_item(news_item, seen_store, portfolio_store)
-                time.sleep(settings.analysis_pause_seconds)
+                time.sleep(2) 
 
-        print(f"\n[INFO] Cycle complete. Next scan in {settings.scan_interval_seconds} seconds.")
+        print(f"\n[INFO] Cycle complete. Next scan in {settings.scan_interval_seconds}s.")
         time.sleep(settings.scan_interval_seconds)
 
 
