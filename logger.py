@@ -2,7 +2,7 @@ import csv
 from datetime import datetime
 from pathlib import Path
 
-
+#this code records everything
 LOG_DIR = Path("data")
 EVENT_LOG = LOG_DIR / "events.csv"
 TRADE_LOG = LOG_DIR / "trades.csv"
