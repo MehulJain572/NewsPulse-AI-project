@@ -1,5 +1,5 @@
 import time
-
+#this code integrates all the 5 phases and make them work together
 from brain import analyze_news
 from env_utils import env_status
 from executor import execute_trade
