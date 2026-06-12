@@ -118,16 +118,25 @@ def fetch_newsapi_data():
 
 
 def get_all_headlines():
-    items = fetch_twitter_rss() + fetch_finnhub_news() + fetch_newsapi_data()
-    deduped = {}
+    fake_news = [{
+        "headline": "CRITICAL: Hindenburg Research exposes massive accounting fraud in Reliance Industries",
+        "fingerprint": "fake_test_001",
+        "source": "Manual_Test"
+    }]
 
+    print("[LOG] Fetching real-time news from all sources...")
+    real_news = fetch_twitter_rss() + fetch_finnhub_news() + fetch_newsapi_data()
+    
+    items = fake_news + real_news
+    
+    deduped = {}
     for item in items:
-        if item["headline"]:
+        if item.get("headline") and item.get("fingerprint"):
             deduped[item["fingerprint"]] = item
 
     print("\n--- DATA SUMMARY ---")
-    print(f"Total fetched: {len(items)}")
-    print(f"Unique headlines: {len(deduped)}")
+    print(f"Total items fetched: {len(items)}")
+    print(f"Unique headlines to process: {len(deduped)}")
 
     return list(deduped.values())
 
