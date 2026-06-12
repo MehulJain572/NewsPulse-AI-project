@@ -1,51 +1,94 @@
 import time
-from fetcher import get_all_headlines  # Phase 1 se news mangwana
-from brain import analyze_news         # Phase 2 se dimaag lagwana
 
-def run_news_pulse_agent():
-    print("\n" + "="*50)
-    print("🤖 NEWSPULSE AI: AUTONOMOUS AGENT IS LIVE")
-    print("="*50)
+from brain import analyze_news
+from env_utils import env_status
+from executor import execute_trade
+from fetcher import get_all_headlines
+from logger import log_event, log_trade
+from settings import settings
+from state import SeenNewsStore, PortfolioStore
+from validator import validate_trade_candidate
 
-    # 1. Internet se saari headlines uthao
-    print("[LOG] Fetching latest headlines from X, NewsAPI, and Finnhub...")
-    headlines = get_all_headlines()
-    
-    if not headlines:
-        print("[!] No headlines found. Check your Internet/APIs.")
+
+def process_news_item(news_item, seen_store, portfolio_store):
+    headline = news_item["headline"]
+    fingerprint = news_item["fingerprint"]
+
+    if seen_store.has_seen(fingerprint):
         return
 
-    print(f"[LOG] Successfully fetched {len(headlines)} headlines. Starting AI Analysis...\n")
+    seen_store.mark_seen(fingerprint)
+    log_event("ingestion", news_item, status="fresh")
 
-    # 2. Har headline ko AI ke paas bhejo analyze karne ke liye
-    for i, news in enumerate(headlines, 1):
-        print(f"[{i}] Analyzing: {news[:75]}...")
-        
-        # AI Analysis calling
-        analysis = analyze_news(news)
-        
-        if analysis:
-            score = analysis.get('panic_score', 0)
-            rec = analysis.get('recommendation', 'HOLD')
-            company = analysis.get('company', 'Unknown')
-            
-            # Console par result dikhao
-            print(f"    >>> Result: {company} | Score: {score} | Action: {rec}")
+    print(f"[ANALYZE] {headline[:90]}")
+    analysis = analyze_news(news_item)
 
-            # 3. Agar Panic Score 80+ hai toh RED ALERT!
-            if score >= 80:
-                print(f"\n🚨🚨 CRITICAL EVENT DETECTED! 🚨🚨")
-                print(f"TARGET: {company}")
-                print(f"AI DECISION: IMMEDIATE {rec}")
-                print(f"REASON: {analysis.get('reason')}")
-                print("-" * 40 + "\n")
-        
-        # Groq ki free limit na cross ho isliye 1 second ka gap
-        time.sleep(1)
+    if not analysis:
+        log_event("analysis", news_item, status="failed", details="LLM analysis returned no result")
+        return
+
+    log_event("analysis", news_item, analysis=analysis, status="complete")
+
+    validation = validate_trade_candidate(analysis, portfolio_store.snapshot())
+    log_event(
+        "validation",
+        news_item,
+        analysis=analysis,
+        status="approved" if validation["approved"] else "rejected",
+        details="; ".join(validation["reasons"]) if validation["reasons"] else "passed",
+    )
+
+    print(
+        f"    -> {analysis['company']} | panic={analysis['panic_score']} | action={analysis['action']} "
+        f"| valid={validation['approved']}"
+    )
+
+    if not validation["approved"]:
+        return
+
+    if analysis["action"] == "IGNORE":
+        return
+
+    trade_result = execute_trade(news_item, analysis, validation, portfolio_store)
+    log_trade(news_item, analysis, validation, trade_result)
+
+    if trade_result["status"] in {"simulated", "placed"}:
+        print(
+            f"[ALERT] {analysis['company']} | {analysis['action']} {trade_result['quantity']} "
+            f"shares | stop-loss {trade_result['stop_loss_pct']}%"
+        )
+
+
+def run_news_pulse_agent():
+    seen_store = SeenNewsStore()
+    portfolio_store = PortfolioStore()
+
+    print("\n" + "=" * 60)
+    print("NEWSPULSE AI: AUTONOMOUS AGENT IS LIVE")
+    print("=" * 60)
+    print(f"[INFO] Scan interval: {settings.scan_interval_seconds}s | Broker mode: {settings.broker_mode}")
+    print(
+        "[INFO] Env status | "
+        f"GROQ_API_KEY: {env_status('GROQ_API_KEY')} | "
+        f"NEWS_API_KEY: {env_status('NEWS_API_KEY')} | "
+        f"FINNHUB_API_KEY: {env_status('FINNHUB_API_KEY')}"
+    )
+
+    while True:
+        print("\n[LOG] Fetching latest headlines...")
+        headlines = get_all_headlines()
+
+        if not headlines:
+            print("[WARN] No headlines fetched in this cycle.")
+        else:
+            print(f"[LOG] {len(headlines)} total headlines fetched. Processing fresh items...")
+            for news_item in headlines:
+                process_news_item(news_item, seen_store, portfolio_store)
+                time.sleep(settings.analysis_pause_seconds)
+
+        print(f"[INFO] Cycle complete. Next scan in {settings.scan_interval_seconds} seconds.")
+        time.sleep(settings.scan_interval_seconds)
+
 
 if __name__ == "__main__":
-    # Ye agent har 10 minute mein scan karega (loop)
-    while True:
-        run_news_pulse_agent()
-        print("\n[INFO] Scan complete. Next scan in 10 minutes...")
-        time.sleep(600) # 600 seconds = 10 minutes
+    run_news_pulse_agent()

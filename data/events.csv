@@ -1,0 +1,102 @@
+timestamp,stage,status,source,headline,company,panic_score,action,details
+2026-06-12T19:06:30,ingestion,fresh,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",,,,
+2026-06-12T19:06:30,analysis,failed,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",,,,LLM analysis returned no result
+2026-06-12T19:06:31,ingestion,fresh,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,,,,
+2026-06-12T19:06:31,analysis,failed,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,,,,LLM analysis returned no result
+2026-06-12T19:06:32,ingestion,fresh,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,,,,
+2026-06-12T19:06:32,analysis,failed,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,,,,LLM analysis returned no result
+2026-06-12T19:06:33,ingestion,fresh,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",,,,
+2026-06-12T19:06:33,analysis,failed,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",,,,LLM analysis returned no result
+2026-06-12T19:06:34,ingestion,fresh,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,,,,
+2026-06-12T19:06:34,analysis,failed,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,,,,LLM analysis returned no result
+2026-06-12T19:10:47,ingestion,fresh,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,,,,
+2026-06-12T19:10:47,analysis,failed,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,,,,LLM analysis returned no result
+2026-06-12T19:10:48,ingestion,fresh,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,,,,
+2026-06-12T19:10:48,analysis,failed,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,,,,LLM analysis returned no result
+2026-06-12T19:10:49,ingestion,fresh,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,,,,
+2026-06-12T19:10:49,analysis,failed,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,,,,LLM analysis returned no result
+2026-06-12T19:10:50,ingestion,fresh,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",,,,
+2026-06-12T19:10:51,analysis,failed,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",,,,LLM analysis returned no result
+2026-06-12T19:10:52,ingestion,fresh,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,,,,
+2026-06-12T19:10:52,analysis,failed,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,,,,LLM analysis returned no result
+2026-06-12T19:10:53,ingestion,fresh,newsapi,Broker’s Call: Adani Power (Neutral),,,,
+2026-06-12T19:10:53,analysis,failed,newsapi,Broker’s Call: Adani Power (Neutral),,,,LLM analysis returned no result
+2026-06-12T19:10:54,ingestion,fresh,newsapi,"AVAV Shareholder Alert: AeroVironment, Inc. Securities Class Action Lawsuit - Investors Should Contact SueWallSt",,,,
+2026-06-12T19:10:54,analysis,failed,newsapi,"AVAV Shareholder Alert: AeroVironment, Inc. Securities Class Action Lawsuit - Investors Should Contact SueWallSt",,,,LLM analysis returned no result
+2026-06-12T19:10:55,ingestion,fresh,newsapi,Global Drone Market Enters Hyper-Growth Phase as Defense Spending and Industrial Automation Soar,,,,
+2026-06-12T19:10:55,analysis,failed,newsapi,Global Drone Market Enters Hyper-Growth Phase as Defense Spending and Industrial Automation Soar,,,,LLM analysis returned no result
+2026-06-12T19:10:56,ingestion,fresh,newsapi,Can missing 15 trading days over 27 years cost investors ₹1.9 crore? The data says yes,,,,
+2026-06-12T19:10:56,analysis,failed,newsapi,Can missing 15 trading days over 27 years cost investors ₹1.9 crore? The data says yes,,,,LLM analysis returned no result
+2026-06-12T19:10:57,ingestion,fresh,newsapi,TryLimitless integrates Chainlink Data Streams for high-speed crypto market resolutions,,,,
+2026-06-12T19:10:57,analysis,failed,newsapi,TryLimitless integrates Chainlink Data Streams for high-speed crypto market resolutions,,,,LLM analysis returned no result
+2026-06-12T19:10:58,ingestion,fresh,newsapi,"Russia’s FSB shuts down mobile internet for weeks, forcing citizens back to cash and paper maps",,,,
+2026-06-12T19:10:58,analysis,failed,newsapi,"Russia’s FSB shuts down mobile internet for weeks, forcing citizens back to cash and paper maps",,,,LLM analysis returned no result
+2026-06-12T19:10:59,ingestion,fresh,newsapi,The key steps that will enable organizations to scale Physical AI,,,,
+2026-06-12T19:10:59,analysis,failed,newsapi,The key steps that will enable organizations to scale Physical AI,,,,LLM analysis returned no result
+2026-06-12T19:19:52,ingestion,fresh,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",,,,
+2026-06-12T19:19:52,analysis,failed,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",,,,LLM analysis returned no result
+2026-06-12T19:19:53,ingestion,fresh,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,,,,
+2026-06-12T19:19:53,analysis,failed,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,,,,LLM analysis returned no result
+2026-06-12T19:19:54,ingestion,fresh,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,,,,
+2026-06-12T19:19:54,analysis,failed,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,,,,LLM analysis returned no result
+2026-06-12T19:19:55,ingestion,fresh,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",,,,
+2026-06-12T19:19:55,analysis,failed,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",,,,LLM analysis returned no result
+2026-06-12T19:19:56,ingestion,fresh,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,,,,
+2026-06-12T19:19:56,analysis,failed,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,,,,LLM analysis returned no result
+2026-06-12T19:19:57,ingestion,fresh,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,,,,
+2026-06-12T19:19:57,analysis,failed,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,,,,LLM analysis returned no result
+2026-06-12T19:19:58,ingestion,fresh,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,,,,
+2026-06-12T19:19:58,analysis,failed,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,,,,LLM analysis returned no result
+2026-06-12T19:19:59,ingestion,fresh,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,,,,
+2026-06-12T19:19:59,analysis,failed,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,,,,LLM analysis returned no result
+2026-06-12T19:20:00,ingestion,fresh,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",,,,
+2026-06-12T19:20:00,analysis,failed,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",,,,LLM analysis returned no result
+2026-06-12T19:20:01,ingestion,fresh,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,,,,
+2026-06-12T19:20:01,analysis,failed,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,,,,LLM analysis returned no result
+2026-06-12T19:20:02,ingestion,fresh,newsapi,Broker’s Call: Adani Power (Neutral),,,,
+2026-06-12T19:20:02,analysis,failed,newsapi,Broker’s Call: Adani Power (Neutral),,,,LLM analysis returned no result
+2026-06-12T19:20:03,ingestion,fresh,newsapi,"AVAV Shareholder Alert: AeroVironment, Inc. Securities Class Action Lawsuit - Investors Should Contact SueWallSt",,,,
+2026-06-12T19:20:03,analysis,failed,newsapi,"AVAV Shareholder Alert: AeroVironment, Inc. Securities Class Action Lawsuit - Investors Should Contact SueWallSt",,,,LLM analysis returned no result
+2026-06-12T19:20:05,ingestion,fresh,newsapi,Global Drone Market Enters Hyper-Growth Phase as Defense Spending and Industrial Automation Soar,,,,
+2026-06-12T19:20:05,analysis,failed,newsapi,Global Drone Market Enters Hyper-Growth Phase as Defense Spending and Industrial Automation Soar,,,,LLM analysis returned no result
+2026-06-12T19:20:06,ingestion,fresh,newsapi,Can missing 15 trading days over 27 years cost investors ₹1.9 crore? The data says yes,,,,
+2026-06-12T19:20:06,analysis,failed,newsapi,Can missing 15 trading days over 27 years cost investors ₹1.9 crore? The data says yes,,,,LLM analysis returned no result
+2026-06-12T19:20:07,ingestion,fresh,newsapi,TryLimitless integrates Chainlink Data Streams for high-speed crypto market resolutions,,,,
+2026-06-12T19:20:07,analysis,failed,newsapi,TryLimitless integrates Chainlink Data Streams for high-speed crypto market resolutions,,,,LLM analysis returned no result
+2026-06-12T19:20:08,ingestion,fresh,newsapi,"Russia’s FSB shuts down mobile internet for weeks, forcing citizens back to cash and paper maps",,,,
+2026-06-12T19:20:08,analysis,failed,newsapi,"Russia’s FSB shuts down mobile internet for weeks, forcing citizens back to cash and paper maps",,,,LLM analysis returned no result
+2026-06-12T19:20:09,ingestion,fresh,newsapi,The key steps that will enable organizations to scale Physical AI,,,,
+2026-06-12T19:20:09,analysis,failed,newsapi,The key steps that will enable organizations to scale Physical AI,,,,LLM analysis returned no result
+2026-06-12T19:22:53,ingestion,fresh,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",,,,
+2026-06-12T19:22:54,analysis,complete,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",Market,30,IGNORE,
+2026-06-12T19:22:54,validation,rejected,x_rss:ETMarkets,"Bitcoin trades near $63,600 as sentiment nears 2022 bottom levels. Here is what experts say - The Economic Times",Market,30,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:22:55,ingestion,fresh,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,,,,
+2026-06-12T19:22:55,analysis,complete,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,Market,60,IGNORE,
+2026-06-12T19:22:55,validation,rejected,x_rss:moneycontrolcom,STRAIT OF HORMUZ REOPENS? Trump Holds Final Call On Iran Deal | Breaking News | U.S. News (99Y565ZmIO) - Fathom Journal,Market,60,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:22:56,ingestion,fresh,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,,,,
+2026-06-12T19:22:57,analysis,complete,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,NVIDIA,20,BUY,
+2026-06-12T19:22:57,validation,rejected,x_rss:DeItaone,Goldman Sachs Sees NVIDIA at $285: Can the Stock Get There in June? - BeInCrypto,NVIDIA,20,BUY,Company is not mapped to a supported NSE/BSE listing.; Market is currently closed.
+2026-06-12T19:22:58,ingestion,fresh,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",,,,
+2026-06-12T19:22:58,analysis,complete,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",Adani Group,60,IGNORE,
+2026-06-12T19:22:58,validation,rejected,x_rss:HindenburgRes,"Will agencies probe allegations of round-tripping by shell firms linked to Vinod Adani, asks Congress - The Hindu",Adani Group,60,IGNORE,AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:22:59,ingestion,fresh,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,,,,
+2026-06-12T19:22:59,analysis,complete,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,Market,10,IGNORE,
+2026-06-12T19:22:59,validation,rejected,x_rss:FinMinIndia,FM Nirmala Sitharaman Holds Pre-Budget 'Chintan Shivir' At Karnataka's Hampi - ETV Bharat,Market,10,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:23:00,ingestion,fresh,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,,,,
+2026-06-12T19:23:01,analysis,complete,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,Market,20,IGNORE,
+2026-06-12T19:23:01,validation,rejected,finnhub,Jim Cramer's top 10 things to watch in the stock market Friday,Market,20,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:23:02,ingestion,fresh,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,,,,
+2026-06-12T19:23:02,analysis,complete,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,SpaceX,20,IGNORE,
+2026-06-12T19:23:02,validation,rejected,finnhub,Former Tesla board member says SpaceX needs to achieve 2 of its 3 moonshots to keep its valuation,SpaceX,20,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:23:03,ingestion,fresh,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,,,,
+2026-06-12T19:23:04,analysis,complete,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,Market,20,BUY,
+2026-06-12T19:23:04,validation,rejected,finnhub,European stocks rally as oil falls on hopes for US-Iran deal - Reuters,Market,20,BUY,Company is not mapped to a supported NSE/BSE listing.; Market is currently closed.
+2026-06-12T19:23:05,ingestion,fresh,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",,,,
+2026-06-12T19:23:05,analysis,complete,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",Market,40,IGNORE,
+2026-06-12T19:23:05,validation,rejected,finnhub,"UK economy began to feel fallout from Iran war in April, data shows - Reuters",Market,40,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:23:06,ingestion,fresh,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,,,,
+2026-06-12T19:23:07,analysis,complete,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,Market,20,IGNORE,
+2026-06-12T19:23:07,validation,rejected,finnhub,Taking Kharg Island would pose risks for US troops - Reuters,Market,20,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
+2026-06-12T19:23:08,ingestion,fresh,newsapi,BOXABL Unveils Rego-Brix Concept for Radiation Shielding Using Lunar Regolith,,,,
+2026-06-12T19:23:09,analysis,complete,newsapi,BOXABL Unveils Rego-Brix Concept for Radiation Shielding Using Lunar Regolith,BOXABL,20,IGNORE,
+2026-06-12T19:23:09,validation,rejected,newsapi,BOXABL Unveils Rego-Brix Concept for Radiation Shielding Using Lunar Regolith,BOXABL,20,IGNORE,Company is not mapped to a supported NSE/BSE listing.; AI recommended IGNORE.; Market is currently closed.
