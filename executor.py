@@ -1,6 +1,6 @@
 from settings import settings
 
-
+#this code executes the trades
 def execute_trade(news_item, analysis, validation, portfolio_store):
     symbol = validation["company_info"]["symbol"]
     quantity = validation["quantity"]
