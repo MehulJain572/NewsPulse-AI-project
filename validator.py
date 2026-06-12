@@ -1,5 +1,5 @@
 from datetime import datetime, time
-
+#this code verifies descisions from ai
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 except ImportError:  # pragma: no cover - Python < 3.9 fallback
