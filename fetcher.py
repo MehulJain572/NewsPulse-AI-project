@@ -4,7 +4,7 @@ import os
 import xml.etree.ElementTree as ET
 from urllib import request
 from urllib.parse import quote_plus
-
+#this code fetches headlines for our ai
 from env_utils import load_local_env
 
 load_local_env()
