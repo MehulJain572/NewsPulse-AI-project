@@ -65,7 +65,7 @@ def fetch_finnhub_news():
     url = f"https://finnhub.io/api/v1/news?category=general&token={FINNHUB_API_KEY}"
 
     try:
-        with request.urlopen(url, timeout=10) as response:
+        with request.urlopen(url, timeout=20) as response:
             payload = json.loads(response.read().decode("utf-8"))
 
         for item in payload[:5]:
