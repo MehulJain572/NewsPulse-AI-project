@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import time
 import xml.etree.ElementTree as ET
 from urllib import request
 from urllib.parse import quote_plus
@@ -117,17 +118,23 @@ def fetch_newsapi_data():
     return headlines
 
 
-def get_all_headlines():
-    fake_news = [{
-        "headline": "CRITICAL: Hindenburg Research exposes massive accounting fraud in Reliance Industries",
-        "fingerprint": "fake_test_001",
-        "source": "Manual_Test"
-    }]
+def _fetch_with_retry(fetch_fn, name, retries=2):
+    for attempt in range(retries + 1):
+        try:
+            return fetch_fn()
+        except Exception as exc:
+            print(f"[WARN] {name} failed (attempt {attempt + 1}/{retries + 1}): {exc}")
+            if attempt < retries:
+                time.sleep(5)
+    return []
 
+def get_all_headlines():
     print("[LOG] Fetching real-time news from all sources...")
-    real_news = fetch_twitter_rss() + fetch_finnhub_news() + fetch_newsapi_data()
-    
-    items = fake_news + real_news
+    items = (
+        _fetch_with_retry(fetch_twitter_rss, "Twitter RSS")
+        + _fetch_with_retry(fetch_finnhub_news, "Finnhub")
+        + _fetch_with_retry(fetch_newsapi_data, "NewsAPI")
+    )
     
     deduped = {}
     for item in items:

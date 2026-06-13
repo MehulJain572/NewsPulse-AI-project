@@ -13,7 +13,7 @@ def _append_csv(path, row, fieldnames):
     file_exists = path.exists()
 
     with path.open("a", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
         if not file_exists:
             writer.writeheader()
         writer.writerow(row)

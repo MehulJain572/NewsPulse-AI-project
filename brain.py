@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from urllib import error, request
 #this code pushes headlines to groq ai and brings json files from there
 from env_utils import load_local_env
@@ -59,41 +60,46 @@ def analyze_news(news_item):
         "Decide the most affected company. If none is specific, use Market."
     )
 
-    try:
-        req = request.Request(
-            GROQ_URL,
-            headers={
-                "Authorization": f"Bearer {groq_api_key}",
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "User-Agent": "NewsPulseAI/1.0 (+local-debug)",
-            },
-            data=json.dumps({
-                "model": "llama-3.3-70b-versatile",
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                "temperature": 0,
-                "max_tokens": 120,
-            }).encode("utf-8"),
-            method="POST",
-        )
-        with request.urlopen(req, timeout=45) as response:
-            payload = json.loads(response.read().decode("utf-8"))
-        content = payload["choices"][0]["message"]["content"]
-        payload = json.loads(content)
-        return _normalize_analysis(payload)
-    except error.HTTPError as exc:
+    last_error = None
+    for attempt in range(3):
         try:
-            body = exc.read().decode("utf-8", errors="replace")
-        except Exception:
-            body = "<unable to read response body>"
-        print(f"[AI ERROR] HTTP {exc.code}: {exc.reason} | body={body[:500]}")
-        return None
-    except Exception as exc:
-        print(f"[AI ERROR] {exc}")
-        return None
+            req = request.Request(
+                GROQ_URL,
+                headers={
+                    "Authorization": f"Bearer {groq_api_key}",
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "User-Agent": "NewsPulseAI/1.0 (+local-debug)",
+                },
+                data=json.dumps({
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    "temperature": 0,
+                    "max_tokens": 120,
+                }).encode("utf-8"),
+                method="POST",
+            )
+            with request.urlopen(req, timeout=45) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            content = payload["choices"][0]["message"]["content"]
+            payload = json.loads(content)
+            return _normalize_analysis(payload)
+        except error.HTTPError as exc:
+            try:
+                body = exc.read().decode("utf-8", errors="replace")
+            except Exception:
+                body = "<unable to read response body>"
+            print(f"[AI ERROR] HTTP {exc.code}: {exc.reason} | body={body[:500]}")
+            last_error = exc
+        except Exception as exc:
+            print(f"[AI ERROR] {exc}")
+            last_error = exc
+        if attempt < 2:
+            time.sleep(5)
+    return None
 
 
 if __name__ == "__main__":

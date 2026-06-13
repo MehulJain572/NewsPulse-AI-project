@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AETHER</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#171614">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="stylesheet" href="/style.css?v=3">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div class="site-noise" aria-hidden="true"></div>
+
+  <section id="authView" class="auth-shell">
+    <div class="auth-stage">
+      <div class="auth-art">
+        <div class="auth-art-copy">
+          <p class="eyebrow">Intelligent Trade Surface</p>
+          <h1>AETHER</h1>
+          <p>
+            A refined execution console for AI-scored market signals, portfolio tracking,
+            approval workflows, and high-priority news intelligence.
+          </p>
+        </div>
+        <svg class="auth-ribbon" viewBox="0 0 980 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="authGlow" x1="0" y1="0" x2="980" y2="420" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#D7BC7A"/>
+              <stop offset=".4" stop-color="#FFF7E2"/>
+              <stop offset="1" stop-color="#735B2C"/>
+            </linearGradient>
+          </defs>
+          <path d="M16 248C134 210 156 134 274 148C386 162 398 280 522 274C652 268 664 136 790 126C858 120 912 142 964 178" stroke="url(#authGlow)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M34 270C142 212 198 194 294 220C406 250 470 334 612 306C740 282 770 168 956 154" stroke="rgba(255,245,220,.18)" stroke-width="1.5"/>
+          <path d="M52 290C160 256 206 254 324 276C424 294 534 356 640 334C798 302 828 190 944 184" stroke="rgba(215,188,122,.24)" stroke-width="1.5"/>
+          <circle cx="332" cy="174" r="46" stroke="rgba(255,247,226,.36)"/>
+          <circle cx="332" cy="174" r="34" fill="rgba(255,247,226,.08)"/>
+          <rect x="314" y="190" width="10" height="22" rx="3" fill="#D7BC7A"/>
+          <rect x="329" y="170" width="10" height="42" rx="3" fill="#F8E6B8"/>
+          <rect x="344" y="148" width="10" height="64" rx="3" fill="#FFF7E2"/>
+          <path d="M704 102L738 70L736 96L772 94L744 124L746 98L710 100L704 102Z" fill="#E8C980"/>
+        </svg>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-card-top">
+          <p class="eyebrow">Secure Access</p>
+          <h2 class="auth-logo">AETHER</h2>
+        </div>
+
+        <div class="auth-tabs" role="tablist" aria-label="Authentication">
+          <button class="auth-tab active" data-auth="login" type="button">Login</button>
+          <button class="auth-tab" data-auth="signup" type="button">Sign Up</button>
+        </div>
+
+        <form id="loginForm" class="auth-form">
+          <div class="auth-error" id="loginError"></div>
+          <label class="field">
+            <span>Username</span>
+            <input type="text" placeholder="Enter your username" id="loginUsername" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input type="password" placeholder="Enter your password" id="loginPassword" required>
+          </label>
+          <button type="submit" class="btn btn-gold btn-block">Enter Dashboard</button>
+        </form>
+
+        <form id="signupForm" class="auth-form" hidden>
+          <div class="auth-error" id="signupError"></div>
+          <label class="field">
+            <span>Username</span>
+            <input type="text" placeholder="Minimum 3 characters" id="signupUsername" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input type="password" placeholder="Minimum 4 characters" id="signupPassword" required>
+          </label>
+          <button type="submit" class="btn btn-gold btn-block">Create Account</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboardView" class="dashboard-shell" hidden>
+    <header class="masthead">
+      <div class="brand-cluster">
+        <div class="brand-lockup">
+          <span class="brand-mark"></span>
+          <div>
+            <p class="brand-kicker">Private Trading Surface</p>
+            <h1 class="brand-name">AETHER</h1>
+          </div>
+        </div>
+        <p class="brand-user" id="headerUser"></p>
+      </div>
+
+      <nav class="main-nav" aria-label="Primary">
+        <button class="nav-link active" data-tab="overview" type="button">Overview</button>
+        <button class="nav-link" data-tab="holdings" type="button">Holdings</button>
+        <button class="nav-link" data-tab="insights" type="button">Insights</button>
+        <button class="nav-link" data-tab="activity" type="button">Activity</button>
+        <button class="nav-link" data-tab="profile" type="button">Profile</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="pushToggleBtn" title="Push notifications" aria-label="Push notifications"></button>
+        <button class="icon-btn" id="linkTelegramBtn" title="Link Telegram" aria-label="Link Telegram"></button>
+        <button class="icon-btn" id="logoutBtn" title="Logout" aria-label="Logout"></button>
+      </div>
+    </header>
+
+    <div id="installBanner" class="notice-banner" hidden>
+      <div class="notice-icon" data-icon="install"></div>
+      <div class="notice-copy">
+        <strong>Install the dashboard</strong>
+        <span>Keep the trading surface pinned for faster access and live push alerts.</span>
+      </div>
+      <div class="notice-actions">
+        <button id="installBtn" class="btn btn-gold btn-small" type="button">Install</button>
+        <button id="installDismiss" class="btn btn-ghost btn-small" type="button">Dismiss</button>
+      </div>
+    </div>
+
+    <div id="telegramBanner" class="notice-banner notice-banner-accent" hidden>
+      <div class="notice-icon" data-icon="signal"></div>
+      <div class="notice-copy">
+        <strong>Link Telegram approvals</strong>
+        <span>Approve urgent signals from your phone without opening the dashboard.</span>
+      </div>
+      <div class="notice-actions">
+        <button id="telegramBannerBtn" class="btn btn-gold btn-small" type="button">Link Telegram</button>
+        <button id="telegramBannerDismiss" class="btn btn-ghost btn-small" type="button">Dismiss</button>
+      </div>
+    </div>
+
+    <main class="dashboard-main">
+      <section id="tab-overview" class="tab-pane active">
+        <section class="hero-panel">
+          <div class="hero-copy">
+            <div class="hero-copy-top">
+              <p class="eyebrow">Portfolio Value</p>
+              <div class="hero-delta">
+                <span id="portfolioChangePct">—</span>
+                <span id="portfolioDeltaValue">—</span>
+              </div>
+            </div>
+
+            <div class="hero-art-wrap">
+              <svg class="hero-art" viewBox="0 0 1120 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="ribbonA" x1="115" y1="220" x2="970" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#8E6A2E"/>
+                    <stop offset=".25" stop-color="#FFF2D0"/>
+                    <stop offset=".54" stop-color="#D0A85D"/>
+                    <stop offset="1" stop-color="#F9F2DF"/>
+                  </linearGradient>
+                  <linearGradient id="ribbonB" x1="160" y1="118" x2="904" y2="306" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="rgba(255,255,255,.12)"/>
+                    <stop offset=".4" stop-color="#E9D4A1"/>
+                    <stop offset="1" stop-color="#6D5430"/>
+                  </linearGradient>
+                </defs>
+
+                <path d="M34 228C152 258 230 148 334 150C458 152 476 270 606 270C724 270 760 144 876 140C954 136 1016 172 1084 210" stroke="rgba(207,176,113,.36)" stroke-width="2"/>
+                <path d="M66 244C182 164 290 150 398 188C486 220 548 312 666 304C804 294 836 186 1000 170" stroke="rgba(255,244,219,.15)" stroke-width="1.5"/>
+
+                <path d="M64 220C190 134 302 160 388 214C470 266 590 306 706 250C816 198 852 88 1000 86C1048 86 1088 96 1112 110" stroke="url(#ribbonA)" stroke-width="44" stroke-linecap="round"/>
+                <path d="M86 230C214 166 294 186 372 232C450 278 582 298 694 248C816 194 886 120 1030 114" stroke="rgba(17,14,14,.22)" stroke-width="10" stroke-linecap="round"/>
+                <path d="M44 214C170 136 250 150 344 200C436 248 586 278 708 238C826 198 872 120 1046 108" stroke="url(#ribbonB)" stroke-width="20" stroke-linecap="round"/>
+
+                <circle cx="278" cy="136" r="52" stroke="rgba(255,242,208,.38)" stroke-width="2"/>
+                <circle cx="278" cy="136" r="34" fill="rgba(255,242,208,.08)"/>
+                <rect x="252" y="150" width="14" height="34" rx="4" fill="#C7A460"/>
+                <rect x="273" y="124" width="14" height="60" rx="4" fill="#E8D29D"/>
+                <rect x="294" y="98" width="14" height="86" rx="4" fill="#FFF6E3"/>
+
+                <rect x="690" y="134" width="16" height="64" rx="4" fill="#C7A460"/>
+                <rect x="716" y="102" width="16" height="96" rx="4" fill="#E8D29D"/>
+                <rect x="742" y="82" width="16" height="116" rx="4" fill="#FFF6E3"/>
+                <rect x="768" y="112" width="16" height="86" rx="4" fill="#D7BC7A"/>
+
+                <path d="M868 86L908 54L906 84L950 80L914 116L916 88L872 92L868 86Z" fill="#F2D289"/>
+                <path d="M642 232L704 174" stroke="#1C1815" stroke-opacity=".18" stroke-width="5" stroke-linecap="round"/>
+                <path d="M620 264L682 206" stroke="#1C1815" stroke-opacity=".12" stroke-width="4" stroke-linecap="round"/>
+
+                <circle cx="478" cy="272" r="20" fill="rgba(255,242,208,.08)" stroke="rgba(215,188,122,.24)"/>
+                <circle cx="820" cy="214" r="6" fill="#1D1710"/>
+                <circle cx="820" cy="214" r="3" fill="#D9B96F"/>
+                <circle cx="984" cy="184" r="7" fill="#1D1710"/>
+                <circle cx="984" cy="184" r="3.5" fill="#D9B96F"/>
+              </svg>
+            </div>
+
+            <div class="hero-metrics">
+              <div class="hero-value-stack">
+                <span class="hero-value" id="portfolioTotal">—</span>
+                <div class="hero-mini-grid">
+                  <div class="hero-mini-metric">
+                    <span class="metric-label">Available Cash</span>
+                    <span class="metric-value" id="portfolioCash">—</span>
+                  </div>
+                  <div class="hero-mini-metric">
+                    <span class="metric-label">Total P&amp;L</span>
+                    <span class="metric-value" id="portfolioPnl">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-chart-card">
+            <div class="panel-topline">
+              <span>Performance Curve</span>
+              <span id="performanceRangeLabel">1Y</span>
+            </div>
+            <div class="hero-chart-wrap">
+              <canvas id="performanceChart" height="150"></canvas>
+            </div>
+          </div>
+        </section>
+
+        <section class="overview-grid">
+          <article class="stat-panel">
+            <div class="panel-topline">
+              <span>Signal Load</span>
+              <span id="statsHeadlinesToday">—</span>
+            </div>
+            <p class="stat-note">Analyzed headlines in the active session.</p>
+          </article>
+          <article class="stat-panel">
+            <div class="panel-topline">
+              <span>Trade Events</span>
+              <span id="statsTradesCount">—</span>
+            </div>
+            <p class="stat-note">Completed or simulated execution records.</p>
+          </article>
+          <article class="stat-panel">
+            <div class="panel-topline">
+              <span>Queued Signals</span>
+              <span id="statsPendingCount">—</span>
+            </div>
+            <p class="stat-note">Awaiting market open or execution conditions.</p>
+          </article>
+          <article class="stat-panel">
+            <div class="panel-topline">
+              <span>Core Positions</span>
+              <span id="statsHoldingsCount">—</span>
+            </div>
+            <p class="stat-note">Active holding quantities across listed symbols.</p>
+          </article>
+        </section>
+
+        <section class="panel surface-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Core Holdings</p>
+              <h2>Largest positions on the book</h2>
+            </div>
+          </div>
+          <div class="core-holdings-strip" id="coreHoldingsStrip">
+            <p class="empty-msg">No holdings available yet.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-holdings" class="tab-pane">
+        <section class="panel surface-panel">
+          <div class="panel-header panel-header-spread">
+            <div>
+              <p class="eyebrow">Portfolio Ledger</p>
+              <h2>Holdings and imported positions</h2>
+            </div>
+            <div class="panel-actions">
+              <button class="btn btn-ghost" id="importBtn" type="button">Import CSV</button>
+              <button class="btn btn-gold" id="refreshPricesBtn" type="button">Refresh Prices</button>
+            </div>
+          </div>
+          <div id="holdingsList" class="holdings-list"></div>
+          <p class="empty-msg" id="holdingsEmpty">No holdings yet. Import your portfolio to populate this section.</p>
+        </section>
+      </section>
+
+      <section id="tab-insights" class="tab-pane">
+        <section class="panel surface-panel">
+          <div class="panel-header panel-header-spread">
+            <div>
+              <p class="eyebrow">Headline Stream</p>
+              <h2>Scored market intelligence</h2>
+            </div>
+            <div class="filter-pills" id="headlineTabs">
+              <button class="filter-pill active" data-filter="all" type="button">All</button>
+              <button class="filter-pill" data-filter="critical" type="button">Critical</button>
+              <button class="filter-pill" data-filter="important" type="button">Important</button>
+              <button class="filter-pill" data-filter="normal" type="button">Normal</button>
+            </div>
+          </div>
+          <div class="headlines-list" id="headlinesList">
+            <p class="empty-msg">No headlines yet.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="tab-activity" class="tab-pane">
+        <section class="panel surface-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Execution Log</p>
+              <h2>Trade activity and status trail</h2>
+            </div>
+          </div>
+          <div class="trades-table-wrap">
+            <table class="trades-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Company</th>
+                  <th>Symbol</th>
+                  <th>Action</th>
+                  <th>Qty</th>
+                  <th>Value</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tradesBody"></tbody>
+            </table>
+          </div>
+          <p class="empty-msg" id="tradesEmpty">No trades yet.</p>
+        </section>
+      </section>
+
+      <section id="tab-profile" class="tab-pane">
+        <div class="profile-grid">
+          <section class="panel surface-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Account</p>
+                <h2>Session and delivery settings</h2>
+              </div>
+            </div>
+            <div class="profile-card">
+              <div class="profile-row">
+                <span>Signed in as</span>
+                <strong id="profileUsername">—</strong>
+              </div>
+              <div class="profile-row">
+                <span>Telegram status</span>
+                <strong id="profileTelegramStatus">Checking</strong>
+              </div>
+              <div class="profile-row">
+                <span>Push notifications</span>
+                <strong id="profilePushStatus">Checking</strong>
+              </div>
+              <div class="profile-actions">
+                <button id="profileLinkTelegramBtn" class="btn btn-gold" type="button">Link Telegram</button>
+                <button id="profilePushBtn" class="btn btn-ghost" type="button">Manage Push</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel surface-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Pending Queue</p>
+                <h2>Signals waiting on execution</h2>
+              </div>
+            </div>
+            <div id="pendingList" class="pending-list">
+              <p class="empty-msg">No pending approvals or queued signals.</p>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-dock" aria-label="Mobile navigation">
+      <button class="dock-link active" data-tab="overview" type="button">
+        <span class="dock-icon" data-icon="overview"></span>
+        <span class="dock-label">Overview</span>
+      </button>
+      <button class="dock-link" data-tab="holdings" type="button">
+        <span class="dock-icon" data-icon="holdings"></span>
+        <span class="dock-label">Holdings</span>
+      </button>
+      <button class="dock-link" data-tab="insights" type="button">
+        <span class="dock-icon" data-icon="insights"></span>
+        <span class="dock-label">Insights</span>
+      </button>
+      <button class="dock-link" data-tab="activity" type="button">
+        <span class="dock-icon" data-icon="activity"></span>
+        <span class="dock-label">Activity</span>
+      </button>
+      <button class="dock-link" data-tab="profile" type="button">
+        <span class="dock-icon" data-icon="profile"></span>
+        <span class="dock-label">Profile</span>
+      </button>
+    </nav>
+  </section>
+
+  <div id="importModal" class="modal" hidden>
+    <div class="modal-content">
+      <button class="modal-close" type="button" aria-label="Close modal"></button>
+      <p class="eyebrow">Portfolio Import</p>
+      <h2>Upload a broker statement</h2>
+      <p class="text-muted">Use a CSV from Groww, Zerodha, or Upstox, or paste raw rows directly.</p>
+      <div class="import-tabs">
+        <button class="filter-pill active" data-import="file" type="button">Upload File</button>
+        <button class="filter-pill" data-import="paste" type="button">Paste CSV</button>
+      </div>
+      <div id="importFile" class="import-pane active">
+        <input type="file" id="csvFileInput" accept=".csv">
+      </div>
+      <div id="importPaste" class="import-pane" hidden>
+        <textarea id="csvPasteArea" rows="6" placeholder="Paste CSV content here..."></textarea>
+      </div>
+      <button class="btn btn-gold btn-block" id="importSubmitBtn" type="button">Import Portfolio</button>
+      <div id="importResult" class="import-result" hidden></div>
+    </div>
+  </div>
+
+  <div id="telegramModal" class="modal" hidden>
+    <div class="modal-content">
+      <button class="modal-close" type="button" aria-label="Close modal"></button>
+      <p class="eyebrow">Telegram Link</p>
+      <h2>Connect approval alerts</h2>
+      <p id="telegramInstructions">Generate a secure linking code to connect this dashboard to your Telegram chat.</p>
+      <div class="link-code-box" id="linkCodeBox" hidden>
+        <strong id="linkCodeValue"></strong>
+      </div>
+      <p id="telegramExtra" class="text-muted"></p>
+      <button id="generateLinkBtn" class="btn btn-gold btn-block" type="button">Generate Code</button>
+      <a id="telegramDeepLink" class="btn btn-ghost btn-block telegram-deep-link" hidden target="_blank" rel="noopener">Open Telegram Bot</a>
+    </div>
+  </div>
+
+  <script src="/app.js?v=3"></script>
+</body>
+</html>

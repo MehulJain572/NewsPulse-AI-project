@@ -1,76 +1,78 @@
-import json
-from pathlib import Path
-
-
-DATA_DIR = Path("data")
-SEEN_NEWS_FILE = DATA_DIR / "seen_news.json"
-PORTFOLIO_FILE = DATA_DIR / "portfolio.json"
+import db
 
 
 class SeenNewsStore:
-    def __init__(self, path=SEEN_NEWS_FILE):
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        self._seen = self._load()
-
-    def _load(self):
-        if not self.path.exists():
-            return []
-        try:
-            return json.loads(self.path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            return []
-
-    def _save(self):
-        self.path.write_text(json.dumps(self._seen[-1000:], indent=2), encoding="utf-8")
+    def __init__(self, user_id: int):
+        self.user_id = user_id
 
     def has_seen(self, fingerprint):
-        return fingerprint in self._seen
+        return db.has_seen_news(self.user_id, fingerprint)
 
     def mark_seen(self, fingerprint):
-        if fingerprint not in self._seen:
-            self._seen.append(fingerprint)
-            self._save()
+        db.mark_seen_news(self.user_id, fingerprint)
 
 
 class PortfolioStore:
-    def __init__(self, path=PORTFOLIO_FILE):
-        self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        if not self.path.exists():
-            self._write(
-                {
-                    "cash_inr": 500000,
-                    "holdings": {
-                        "RELIANCE": 0,
-                        "ADANIENT": 0,
-                        "TATAMOTORS": 0,
-                        "INFY": 0,
-                        "HDFCBANK": 0,
-                    },
-                }
-            )
-
-    def _read(self):
-        return json.loads(self.path.read_text(encoding="utf-8"))
-
-    def _write(self, payload):
-        self.path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    def __init__(self, user_id: int):
+        self.user_id = user_id
 
     def snapshot(self):
-        return self._read()
+        return db.get_portfolio_snapshot(self.user_id)
 
-    def apply_paper_trade(self, symbol, action, quantity, estimated_value):
-        state = self._read()
-        holdings = state.setdefault("holdings", {})
-        holdings.setdefault(symbol, 0)
+    def current_price_for(self, symbol):
+        holdings = db.get_holdings(self.user_id)
+        h = holdings.get(symbol)
+        if h and h.get("current_price", 0) > 0:
+            return h["current_price"]
+        cached = db.get_cached_price(symbol)
+        if cached and cached > 0:
+            return cached
+        return None
+
+    def apply_paper_trade(self, symbol, action, quantity, price):
+        state = db.get_portfolio_snapshot(self.user_id)
+        cash = state["cash_inr"]
+        holdings = state["holdings"]
+        estimated_value = round(price * quantity, 2)
 
         if action == "BUY":
-            holdings[symbol] += quantity
-            state["cash_inr"] = round(state.get("cash_inr", 0) - estimated_value, 2)
-        elif action == "SELL":
-            holdings[symbol] = max(0, holdings[symbol] - quantity)
-            state["cash_inr"] = round(state.get("cash_inr", 0) + estimated_value, 2)
+            holding = holdings.get(symbol, {"qty": 0, "avg_price": 0.0})
+            total_cost = holding["qty"] * holding["avg_price"] + estimated_value
+            new_qty = holding["qty"] + quantity
+            new_avg = round(total_cost / new_qty, 2) if new_qty > 0 else 0
+            db.upsert_holding(self.user_id, symbol, new_qty, new_avg)
+            db.set_cash_balance(self.user_id, round(cash - estimated_value, 2))
 
-        self._write(state)
-        return state
+        elif action == "SELL":
+            holding = holdings.get(symbol)
+            if holding is None or holding["qty"] < quantity:
+                quantity = holding["qty"] if holding else 0
+            if holding and quantity > 0:
+                sale_value = round(price * quantity, 2)
+                remaining_qty = holding["qty"] - quantity
+                if remaining_qty <= 0:
+                    db.delete_holding(self.user_id, symbol)
+                else:
+                    db.upsert_holding(self.user_id, symbol, remaining_qty, holding["avg_price"])
+                db.set_cash_balance(self.user_id, round(cash + sale_value, 2))
+
+        return db.get_portfolio_snapshot(self.user_id)
+
+
+class PendingTradeQueue:
+    def __init__(self, user_id: int):
+        self.user_id = user_id
+
+    def enqueue(self, news_item, analysis, validation, status='queued_market_closed', approval_request_id=None):
+        db.enqueue_pending(self.user_id, news_item, analysis, validation,
+                           status=status, approval_request_id=approval_request_id)
+
+    def dequeue_all(self):
+        return db.dequeue_all_pending(self.user_id)
+
+    def peek_all(self):
+        return db.get_all_pending(self.user_id)
+
+    @property
+    def is_empty(self):
+        return db.pending_count(self.user_id, status='queued_market_closed') == 0
