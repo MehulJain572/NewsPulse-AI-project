@@ -138,5 +138,6 @@ def generate_link_code():
         "code": code,
         "bot_username": bot_username,
         "deep_link": f"https://t.me/{bot_username}?start={code}" if bot_username else "",
+        "native_link": f"tg://resolve?domain={bot_username}&start={code}" if bot_username else "",
         "instructions": f"Message the bot: /link {code}",
     })

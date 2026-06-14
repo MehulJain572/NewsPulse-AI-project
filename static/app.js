@@ -352,24 +352,34 @@ async function openTelegramDirect() {
   btn.disabled = true;
   const data = await generateTelegramLink();
   btn.disabled = false;
-  if (data && data.deep_link) {
-    window.open(data.deep_link, '_blank');
-  } else {
-    openTelegramModal();
+  if (!data) return;
+  const link = data.native_link || data.deep_link;
+  if (link) {
+    window.open(link, '_blank');
   }
+  showTelegramLinkingModal(data);
 }
 
-function openTelegramModal() {
-  document.getElementById('telegramModal').hidden = false;
+function showTelegramLinkingModal(data) {
+  const modal = document.getElementById('telegramModal');
+  document.getElementById('telegramInstructions').textContent =
+    'Open Telegram and press START to link your account.';
   document.getElementById('linkCodeBox').hidden = true;
-  document.getElementById('telegramInstructions').textContent = 'Generate a secure linking code to connect this dashboard to your Telegram chat.';
+  const deepLink = document.getElementById('telegramDeepLink');
+  const link = data.native_link || data.deep_link;
+  if (link) {
+    deepLink.href = link;
+    deepLink.textContent = 'Open Telegram';
+    deepLink.hidden = false;
+  } else {
+    deepLink.hidden = true;
+  }
   document.getElementById('telegramExtra').textContent = '';
-  document.getElementById('telegramDeepLink').hidden = true;
-  document.getElementById('generateLinkBtn').hidden = false;
+  modal.hidden = false;
 }
 
 document.getElementById('linkTelegramBtn').addEventListener('click', openTelegramDirect);
-document.getElementById('profileLinkTelegramBtn').addEventListener('click', openTelegramModal);
+document.getElementById('profileLinkTelegramBtn').addEventListener('click', openTelegramDirect);
 
 document.querySelectorAll('.modal-close').forEach((el) => {
   el.addEventListener('click', () => {
@@ -381,28 +391,6 @@ document.querySelectorAll('.modal').forEach((modal) => {
   modal.addEventListener('click', (e) => {
     if (e.target === e.currentTarget) modal.hidden = true;
   });
-});
-
-document.getElementById('generateLinkBtn').addEventListener('click', async () => {
-  try {
-    const data = await generateTelegramLink();
-    if (!data) throw new Error('Failed to generate code');
-    document.getElementById('linkCodeBox').hidden = false;
-    document.getElementById('linkCodeValue').textContent = data.code;
-    document.getElementById('generateLinkBtn').hidden = true;
-    document.getElementById('telegramInstructions').textContent = 'Open Telegram and use this secure link code to complete pairing.';
-    document.getElementById('telegramExtra').textContent = `If deep linking fails, message the bot manually with: /link ${data.code}`;
-    const deepLink = document.getElementById('telegramDeepLink');
-    if (data.deep_link) {
-      deepLink.href = data.deep_link;
-      deepLink.hidden = false;
-      deepLink.textContent = 'Open Telegram Bot';
-    } else {
-      deepLink.hidden = true;
-    }
-  } catch (err) {
-    document.getElementById('telegramInstructions').textContent = `Error: ${err.message}`;
-  }
 });
 
 window.addEventListener('beforeinstallprompt', (e) => {

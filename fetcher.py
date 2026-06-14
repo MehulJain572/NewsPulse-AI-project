@@ -129,29 +129,13 @@ def _fetch_with_retry(fetch_fn, name, retries=2):
     return []
 
 def get_all_headlines():
-    # --- 🚨 FINAL HACKATHON DEMO: HYPER-POSITIVE URGENT SIGNAL 🚨 ---
-    # This headline is designed to trigger a high intensity (80+) score naturally.
-    fake_news_headline = "AETHER EXCLUSIVE: Elon Musk and Tesla confirm $30 Billion surprise acquisition of Reliance Industries stake; Analysts issue 'Extreme Buy' as shares set to surge 40% at open!"
-    
-    demo_item = _build_news_item(
-        source="Manual_Test",
-        headline=fake_news_headline,
-        url="https://aether-market-pulse.com/tesla-reliance-deal",
-        published_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    )
-    # Using timestamp in fingerprint to ensure it is always new
-    demo_item["fingerprint"] = f"demo_final_surge_{int(time.time())}" 
-    # --- 🚨 END OF DEMO HACK 🚨 ---
-
     print("[LOG] Fetching real-time market data...")
-    real_items = (
+    items = (
         _fetch_with_retry(fetch_twitter_rss, "Twitter RSS")
         + _fetch_with_retry(fetch_finnhub_news, "Finnhub")
         + _fetch_with_retry(fetch_newsapi_data, "NewsAPI")
     )
-    
-    items = [demo_item] + real_items
-    
+
     deduped = {}
     for item in items:
         if item.get("headline") and item.get("fingerprint"):

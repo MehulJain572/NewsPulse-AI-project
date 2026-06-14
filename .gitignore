@@ -4,7 +4,5 @@ session.json
 cookies.json
 data/*.db
 *.pem
-data/*.db
-*.pem
 data/*.csv
 data/*.json

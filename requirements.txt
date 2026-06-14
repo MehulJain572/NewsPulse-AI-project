@@ -1,7 +1,8 @@
-python-dotenv
-pyTelegramBotAPI
 flask
+pyTelegramBotAPI
 pyjwt
-pywebpush
-Pillow
 bcrypt
+pywebpush
+cryptography
+py-vapid
+waitress
