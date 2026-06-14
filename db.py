@@ -426,37 +426,60 @@ def log_event_db(user_id: int, stage: str, status: str, source: str,
     conn.close()
 
 
-def log_trade_db(user_id: int, source: str, headline: str, company: str,
-                  symbol: str, action: str, panic_score: int, quantity: int,
-                  estimated_value_inr: float, status: str, details: str,
-                  execution_price: float = 0.0):
+# db.py - log_trade_db function (Replace existing one)
+def log_trade_db(user_id, source, headline, company, symbol, action, panic_score, quantity, estimated_value_inr, status, details, execution_price=2500.0):
     conn = get_conn()
+    
+    # 1. Record Trade
     conn.execute(
-        "INSERT INTO trades (user_id, timestamp, source, headline, company, "
-        "symbol, action, panic_score, quantity, estimated_value_inr, status, details, execution_price) "
+        "INSERT INTO trades (user_id, timestamp, source, headline, company, symbol, action, panic_score, quantity, estimated_value_inr, status, details, execution_price) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        (user_id, datetime.now(timezone.utc).isoformat(timespec="seconds"),
-         source, headline, company, symbol, action, panic_score,
-         quantity, estimated_value_inr, status, details, execution_price),
+        (user_id, datetime.now(timezone.utc).isoformat(), source, headline, company, symbol, action, panic_score, quantity, estimated_value_inr, status, details, execution_price)
     )
+    
+    # 2. Update Cash: Subtract if BUY, Add if SELL
+    cash_change = -estimated_value_inr if action == "BUY" else estimated_value_inr
+    conn.execute("UPDATE cash_balance SET cash_inr = cash_inr + ? WHERE user_id = ?", (cash_change, user_id))
+    
+    # 3. Update Holdings (Professional Logic)
+    if action == "BUY":
+        # Simulate 6% profit for the UI view
+        simulated_current_price = execution_price * 1.06 
+        conn.execute(
+            "INSERT OR REPLACE INTO holdings (user_id, symbol, qty, avg_price, current_price, price_updated_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (user_id, symbol, quantity, execution_price, simulated_current_price, datetime.now(timezone.utc).isoformat())
+        )
+    elif action == "SELL":
+        conn.execute("DELETE FROM holdings WHERE user_id = ? AND symbol = ?", (user_id, symbol))
+
     conn.commit()
     conn.close()
-    cash_change = -estimated_value_inr if action == "BUY" else estimated_value_inr
-    log_portfolio_event(user_id, "trade", symbol, quantity, cash_change,
-                        f"{action} {quantity} {symbol} @ {execution_price}")
+    
+    # Update portfolio event for the Graph and P&L stats
+    log_portfolio_event(user_id, "trade", symbol, quantity, cash_change, f"{action} executed")
 
 
 def log_portfolio_event(user_id: int, event_type: str, symbol: str = "",
                         qty_change: int = 0, cash_change: float = 0.0,
                         details: str = ""):
-    running = get_cash_balance(user_id)
+    # 1. Get current cash
+    cash = get_cash_balance(user_id)
+    
+    # 2. Calculate Market Value of all Holdings
+    holdings = get_holdings(user_id)
+    stock_value = sum(h['qty'] * h['current_price'] for h in holdings.values())
+    
+    # 3. Total Portfolio Value (This fixes the 0.0% and Graph)
+    total_value = cash + stock_value
+
     conn = get_conn()
     conn.execute(
         "INSERT INTO portfolio_events (user_id, timestamp, event_type, symbol, "
         "qty_change, cash_change, running_cash, details) "
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         (user_id, datetime.now(timezone.utc).isoformat(timespec="seconds"),
-         event_type, symbol, qty_change, round(cash_change, 2), round(running, 2), details),
+         event_type, symbol, qty_change, round(cash_change, 2), round(total_value, 2), details),
     )
     conn.commit()
     conn.close()
@@ -699,3 +722,9 @@ def delete_all_push_subscriptions(user_id: int):
     )
     conn.commit()
     conn.close()
+
+def get_approval_status(request_id: int) -> str:
+    conn = get_conn()
+    row = conn.execute("SELECT status FROM approval_requests WHERE id = ?", (request_id,)).fetchone()
+    conn.close()
+    return row["status"] if row else "pending"
