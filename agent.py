@@ -75,7 +75,11 @@ def process_news_item(news_item, user_id, seen_store, portfolio_store, pending_q
     action = analysis.get("action", "IGNORE")
     company = analysis.get("company", "Market")
 
-    print(f"    [User {user_id}] {company} | panic={score} | action={action}")
+    # Product-level formatting for terminal logs
+    # Professional text-only formatting for terminal logs
+    short_headline = headline[:85] + "..." if len(headline) > 85 else headline
+    print(f"    [User {user_id}] COMPANY: {company} | PANIC SCORE: {score} | ACTION: {action}")
+    print(f"    ↳ HEADLINE: {short_headline}")
 
     db.log_event_db(
         user_id=user_id, stage="analysis", status="complete",
@@ -105,11 +109,19 @@ def run_news_pulse_agent():
 
     while True:
         users = db.get_all_active_users()
+        linked_users = [u for u in users if u.get("telegram_chat_id")]
+        unlinked_users = [u for u in users if not u.get("telegram_chat_id")]
+
+        # Print waiting message if there are users without Telegram linked
+        if unlinked_users:
+            print(f"[INFO] Waiting for {len(unlinked_users)} user(s) to activate Telegram...")
+
+        # If absolute zero users in DB, just sleep briefly and check again
         if not users:
-            time.sleep(30)
+            time.sleep(5)
             continue
 
-        # Init stores for any new users
+        # Init stores for ALL users
         for user in users:
             uid = user["id"]
             if uid not in user_stores:
@@ -119,30 +131,43 @@ def run_news_pulse_agent():
                     "pending": PendingTradeQueue(uid),
                 }
 
-        # Process pending approvals for each user (non-blocking)
-        for user in users:
+        # Process pending approvals ONLY for linked users
+        for user in linked_users:
             process_pending_approvals(user["id"])
 
-        # Fetch and process headlines
-        headlines = get_all_headlines()
-        if not headlines:
-            print("[LOG] No headlines fetched. Waiting...")
-            time.sleep(30)
-            continue
+        # Fetch and process headlines ONLY if there are linked users
+        if linked_users:
+            headlines = get_all_headlines()
+            if not headlines:
+                print("[LOG] No headlines fetched. Waiting...")
+            else:
+                print(f"[LOG] Processing {len(headlines)} headlines for {len(linked_users)} linked user(s)...")
+                for news_item in headlines:
+                    for user in linked_users:
+                        uid = user["id"]
+                        stores = user_stores[uid]
+                        process_news_item(news_item, uid,
+                                          stores["seen"],
+                                          stores["portfolio"],
+                                          stores["pending"])
+                    time.sleep(0.5)
 
-        print(f"[LOG] Processing {len(headlines)} headlines for {len(users)} user(s)...")
-        for news_item in headlines:
-            for user in users:
-                uid = user["id"]
-                stores = user_stores[uid]
-                process_news_item(news_item, uid,
-                                  stores["seen"],
-                                  stores["portfolio"],
-                                  stores["pending"])
-                time.sleep(0.5)
+        print("[INFO] Cycle complete. Listening for new activations or next scan in 30s...")
 
-        print("[INFO] Cycle complete. Next scan in 30s.")
-        time.sleep(30)
+        # --- THE SMART POLLING LOOP (Zero Interruption) ---
+        for _ in range(30):
+            current_users = db.get_all_active_users()
+            current_linked = [u for u in current_users if u.get("telegram_chat_id")]
+            
+            # If the number of linked users increased (i.e., you just linked yours!)
+            if len(current_linked) > len(linked_users):
+                print("\n" + "=" * 50)
+                print("[SUCCESS] ACTIVATION SUCCESSFUL! New Telegram linked.")
+                print("[INFO] Triggering IMMEDIATE market scan...")
+                print("=" * 50 + "\n")
+                break # Instantly breaks the 30s wait and starts processing your headlines!
+            
+            time.sleep(1)
 
 
 if __name__ == "__main__":

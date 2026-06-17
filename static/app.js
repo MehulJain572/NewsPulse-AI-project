@@ -353,27 +353,40 @@ async function openTelegramDirect() {
   const data = await generateTelegramLink();
   btn.disabled = false;
   if (!data) return;
-  const link = data.native_link || data.deep_link;
+  
+  // 🚀 ENTERPRISE DEEP LINKING MAGIC
+  const link = data.deep_link || data.native_link;
   if (link) {
-    window.open(link, '_blank');
+    // Yeh line direct Chrome ko command degi tera Telegram Desktop App kholne ke liye
+    window.open(link, '_self'); 
+  } else {
+    // Fallback: Agar kisi wajah se deep link na bane toh hi purana modal khulega
+    showTelegramLinkingModal(data);
   }
-  showTelegramLinkingModal(data);
 }
 
 function showTelegramLinkingModal(data) {
   const modal = document.getElementById('telegramModal');
+  
   document.getElementById('telegramInstructions').textContent =
-    'Open Telegram and press START to link your account.';
-  document.getElementById('linkCodeBox').hidden = true;
+    'Open Telegram and send this EXACT code to your Bot to link your account:';
+  
+  const codeBox = document.getElementById('linkCodeBox');
+  codeBox.hidden = false;
+  if (data && data.code) {
+      codeBox.innerHTML = `<div style="font-size: 32px; letter-spacing: 6px; font-weight: bold; color: #c6ad76; padding: 20px; text-align: center; border: 2px dashed #c6ad76; margin-top: 15px; border-radius: 8px;">${data.code}</div>`;
+  }
+
   const deepLink = document.getElementById('telegramDeepLink');
   const link = data.native_link || data.deep_link;
   if (link) {
     deepLink.href = link;
-    deepLink.textContent = 'Open Telegram';
+    deepLink.textContent = 'Open Telegram App (Optional)';
     deepLink.hidden = false;
   } else {
     deepLink.hidden = true;
   }
+  
   document.getElementById('telegramExtra').textContent = '';
   modal.hidden = false;
 }

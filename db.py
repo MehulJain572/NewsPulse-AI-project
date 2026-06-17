@@ -206,7 +206,31 @@ def create_user(username: str, password_hash: str) -> int:
         (username, password_hash),
     )
     user_id = cur.lastrowid
-    conn.execute("INSERT INTO cash_balance (user_id) VALUES (?)", (user_id,))
+    
+    # --- ENTERPRISE AUTO-ONBOARDING LOGIC ---
+    current_time = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    
+    # 1. Initialize Wallet with 10 Lakhs strictly
+    conn.execute("INSERT INTO cash_balance (user_id, cash_inr) VALUES (?, 1000000.0)", (user_id,))
+    
+    # 2. Add Baseline Portfolio Event (Graph start point at 10L)
+    conn.execute("""
+        INSERT INTO portfolio_events (user_id, timestamp, event_type, symbol, qty_change, cash_change, running_cash, details) 
+        VALUES (?, ?, 'system_init', '', 0, 1000000.0, 1000000.0, 'Account funded')
+    """, (user_id, current_time))
+    
+    # 3. Add Demo Holding (RELIANCE) taaki holdings aur P&L active dikhe
+    conn.execute("""
+        INSERT INTO holdings (user_id, symbol, qty, avg_price, current_price, price_updated_at) 
+        VALUES (?, 'RELIANCE', 10, 2500.0, 2650.0, ?)
+    """, (user_id, current_time))
+    
+    # 4. Add Demo Trade Event for Graph Movement (10 Lakh cash + 26.5k holding = 10,26,500)
+    conn.execute("""
+        INSERT INTO portfolio_events (user_id, timestamp, event_type, symbol, qty_change, cash_change, running_cash, details) 
+        VALUES (?, ?, 'trade', 'RELIANCE', 10, -25000.0, 1026500.0, 'Demo startup holding injected')
+    """, (user_id, current_time))
+    
     conn.commit()
     conn.close()
     return user_id
